@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" data-weather-theme="theme-clear-day" data-color-scheme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- Content Security Policy: Strict self + Open-Meteo API origins -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://geocoding-api.open-meteo.com https://api.open-meteo.com;">
+
+  <title>AeroCast — Live Weather Dashboard</title>
+  <meta name="description" content="Production-quality, accessible, real-time weather dashboard powered by Open-Meteo. Zero dependencies, offline-ready, responsive forecast application.">
+  <meta name="theme-color" content="#0284c7">
+
+  <!-- Open Graph Protocol Meta Tags -->
+  <meta property="og:title" content="AeroCast — Live Weather Dashboard">
+  <meta property="og:description" content="Real-time global weather conditions, interactive 5-day forecast, and instant unit switching.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/icons/favicon.svg">
+
+  <!-- Embedded SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z'/%3E%3C/svg%3E">
+
+  <!-- Modular Stylesheets -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Embedded Inline SVG Icon Sprite Definitions -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;" aria-hidden="true">
+    <defs>
+      <!-- Sun -->
+      <g id="icon-sun">
+        <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.93 4.93l1.77 1.77M17.3 17.3l1.77 1.77M4.93 19.07l1.77-1.77M17.3 6.7l1.77-1.77" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <!-- Moon -->
+      <g id="icon-moon">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Cloud -->
+      <g id="icon-cloud">
+        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Partly Cloudy Day -->
+      <g id="icon-partly-cloudy-day">
+        <path d="M12 4V2M4.93 4.93L3.51 3.51M2 12H4M4.93 19.07L3.51 20.49" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M15.5 8A4.5 4.5 0 0 0 8 11.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M20 14.5a3.5 3.5 0 0 0-3.5-3.5h-.7A5.5 5.5 0 0 0 6 15.5a4 4 0 0 0 4 4.5h10a3.5 3.5 0 0 0 0-7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Partly Cloudy Night -->
+      <g id="icon-partly-cloudy-night">
+        <path d="M13 4a6 6 0 0 1 6 6 6 6 0 0 1-.2 1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M19 14.5a3.5 3.5 0 0 0-3.5-3.5h-.7A5.5 5.5 0 0 0 5 15.5a4 4 0 0 0 4 4.5h10a3.5 3.5 0 0 0 0-7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Rain -->
+      <g id="icon-rain">
+        <path d="M16 13v6M8 13v6M12 15v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M20 12.5a3.5 3.5 0 0 0-3.5-3.5h-.7A5.5 5.5 0 0 0 6 13.5a4 4 0 0 0 4 4.5h9a3.5 3.5 0 0 0 1-5.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Drizzle -->
+      <g id="icon-drizzle">
+        <path d="M8 14v2M12 16v2M16 14v2M10 18v2M14 20v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M20 12.5a3.5 3.5 0 0 0-3.5-3.5h-.7A5.5 5.5 0 0 0 6 13.5a4 4 0 0 0 4 4.5h9a3.5 3.5 0 0 0 1-5.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Thunderstorm -->
+      <g id="icon-thunderstorm">
+        <path d="M13 10l-3 5h4l-2 6 6-7h-4l3-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M19 11.5a3.5 3.5 0 0 0-3.5-3.5h-.7A5.5 5.5 0 0 0 5 12.5a4 4 0 0 0 4 4.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Snow -->
+      <g id="icon-snow">
+        <path d="M20 12.5a3.5 3.5 0 0 0-3.5-3.5h-.7A5.5 5.5 0 0 0 6 13.5a4 4 0 0 0 4 4.5h9a3.5 3.5 0 0 0 1-5.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8 16h.01M12 16h.01M16 16h.01M10 19h.01M14 19h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+      <!-- Fog -->
+      <g id="icon-fog">
+        <path d="M4 14h16M6 18h12M8 10h8M5 6h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <!-- Humidity -->
+      <g id="icon-humidity">
+        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Wind -->
+      <g id="icon-wind">
+        <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Sunrise -->
+      <g id="icon-sunrise">
+        <path d="M12 2v4M4.93 10.93l2.83-2.83M19.07 10.93l-2.83-2.83M2 18h20M7 18a5 5 0 0 1 10 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 11l-2 2h4l-2-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Sunset -->
+      <g id="icon-sunset">
+        <path d="M12 6V2M4.93 10.93l2.83-2.83M19.07 10.93l-2.83-2.83M2 18h20M7 18a5 5 0 0 1 10 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 13l-2-2h4l-2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Location GPS -->
+      <g id="icon-location">
+        <polygon points="3 11 22 2 13 21 11 13 3 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Search -->
+      <g id="icon-search">
+        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <!-- Refresh -->
+      <g id="icon-refresh">
+        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 17.65-4.65L21.5 8M22 12.5a10 10 0 0 1-17.65 4.65L2.5 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Alert -->
+      <g id="icon-alert">
+        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="12" cy="16" r="1" fill="currentColor"/>
+      </g>
+      <!-- Raindrop -->
+      <g id="icon-raindrop">
+        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Moon Star (Theme Toggle) -->
+      <g id="icon-theme">
+        <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      </g>
+      <!-- Sparkles / Ambience -->
+      <g id="icon-sparkles">
+        <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4zM19 15l1.2 2.8L23 19l-2.8 1.2L19 23l-1.2-2.8L15 19l2.8-1.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Share -->
+      <g id="icon-share">
+        <circle cx="18" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="6" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="18" cy="19" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="1.8"/>
+      </g>
+      <!-- Activity Index -->
+      <g id="icon-activity">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Umbrella -->
+      <g id="icon-umbrella">
+        <path d="M23 12a11.05 11.05 0 0 0-22 0zm-5 7a3 3 0 0 1-6 0v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- Shirt / Dressing -->
+      <g id="icon-shirt">
+        <path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.5a2 2 0 0 0 2 1.67H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10.86h1.14a2 2 0 0 0 2-1.67l.58-3.5a2 2 0 0 0-1.34-2.23z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- UV Sun -->
+      <g id="icon-uv">
+        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <!-- Clock -->
+      <g id="icon-clock">
+        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <polyline points="12 6 12 12 16 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- Screen Reader Live Status Announcer -->
+  <div id="status-announcer" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Canvas Background for Living Weather Ambience -->
+  <canvas id="ambience-canvas" class="ambience-canvas" aria-hidden="true"></canvas>
+
+  <div class="app-container">
+    <!-- Offline Notification Banner -->
+    <div id="offline-banner" class="offline-banner" role="status" hidden>
+      <svg class="metric-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <use href="#icon-alert"></use>
+      </svg>
+      <span>You are currently offline. Showing cached forecast if available.</span>
+    </div>
+
+    <!-- Application Header Landmark -->
+    <header class="app-header" role="banner">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" role="img" aria-label="AeroCast logo">
+          <use href="#icon-sun"></use>
+        </svg>
+        <h1 class="app-title">AeroCast</h1>
+      </div>
+
+      <div class="header-controls">
+        <!-- Units Toggle -->
+        <div class="unit-toggle" role="group" aria-label="Temperature and speed measurement unit selector">
+          <button id="unit-metric-btn" type="button" class="unit-btn active" aria-pressed="true">°C, km/h</button>
+          <button id="unit-imperial-btn" type="button" class="unit-btn" aria-pressed="false">°F, mph</button>
+        </div>
+
+        <!-- Living Weather Ambience Toggle -->
+        <button id="ambience-toggle-btn" type="button" class="btn-icon active" aria-label="Toggle atmospheric living ambience" title="Toggle ambience">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <use href="#icon-sparkles"></use>
+          </svg>
+        </button>
+
+        <!-- Light/Dark Mode Toggle -->
+        <button id="theme-toggle-btn" type="button" class="btn-icon" aria-label="Toggle light or dark color scheme" title="Toggle theme">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <use href="#icon-theme"></use>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Search Section Landmark -->
+    <section class="search-section" aria-label="City search and history">
+      <!-- Search Form with ARIA Combobox Pattern -->
+      <form id="search-form" class="search-form" role="search" novalidate>
+        <div class="search-input-wrapper">
+          <input
+            id="search-input"
+            type="text"
+            class="search-input"
+            placeholder="Search city (e.g. Pune, London, Tokyo)..."
+            autocomplete="off"
+            spellcheck="false"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded="false"
+            aria-controls="suggestions-list"
+            aria-haspopup="listbox"
+            aria-describedby="input-error"
+            maxlength="80"
+          >
+
+          <div class="search-actions">
+            <!-- Use My Location Button -->
+            <button
+              id="location-btn"
+              type="button"
+              class="btn-location"
+              aria-label="Detect my current location"
+              title="Use current location"
+            >
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <use href="#icon-location"></use>
+              </svg>
+            </button>
+
+            <!-- Submit Button -->
+            <button
+              id="search-submit-btn"
+              type="submit"
+              class="btn-search"
+              aria-label="Search weather for entered city"
+            >
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <use href="#icon-search"></use>
+              </svg>
+              <span>Search</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Inline Validation Error -->
+        <div id="input-error" class="input-error-msg" role="alert" hidden></div>
+
+        <!-- Autocomplete Suggestions Listbox -->
+        <ul
+          id="suggestions-list"
+          role="listbox"
+          aria-label="City search suggestions"
+          class="suggestions-list"
+          hidden
+        ></ul>
+      </form>
+
+      <!-- Clickable Recent Search Chips -->
+      <div id="recent-searches" class="recent-searches" aria-label="Recent cities" hidden></div>
+    </section>
+
+    <!-- Main Content Dynamic Weather Region -->
+    <main id="weather-content" class="weather-content" aria-live="polite" aria-busy="false">
+      <!-- JavaScript populates this region dynamically based on state -->
+    </main>
+
+    <!-- Footer Landmark -->
+    <footer id="app-footer" class="app-footer" role="contentinfo">
+      <p>Data provided by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> • Zero API Keys • Client-side ES Modules</p>
+    </footer>
+  </div>
+
+  <!-- Floating Glassmorphic Toast Notifications -->
+  <div id="toast-container" class="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- Main ES Module Script Entry Point -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
