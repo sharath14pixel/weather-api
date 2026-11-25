@@ -1,99 +1,91 @@
-# AeroCast — Production-Quality Live Weather Dashboard
+# AeroCast — Live Weather Dashboard
 
-> A portfolio-grade, accessible, and responsive Live Weather Dashboard built strictly with **vanilla HTML5, CSS3, and ES2020+ JavaScript modules**. Zero frameworks, zero build tools, zero external JavaScript libraries, and zero API keys required. Engineered to run directly with VS Code Live Server and deploy as-is to GitHub Pages.
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![JavaScript ES2020+](https://img.shields.io/badge/JavaScript-ES2020%2B-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Open-Meteo API](https://img.shields.io/badge/API-Open--Meteo-0284c7?style=flat-square)](https://open-meteo.com/)
+[![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero-22c55e?style=flat-square)](#)
+
+> A production-quality, accessible, and responsive **Live Weather Dashboard** built strictly with **vanilla HTML5, CSS3, and ES2020+ JavaScript modules**. Zero frameworks, zero build tools, zero external JavaScript libraries, and zero API keys required. Engineered to run directly with VS Code Live Server and deploy as-is to GitHub Pages.
 
 ---
 
-## 📸 Preview & Live Demo
+## Live Demo & Repository
 
-- **Live Demo**: `https://<your-username>.github.io/weather-dashboard/` *(Placeholder: replace with your repository URL)*
-- **Local Test Suite**: Open `tests.html` in your browser to inspect automated unit tests.
+- **Repository**: [https://github.com/sharath14pixel/weather-api](https://github.com/sharath14pixel/weather-api)
+- **Live Demo (GitHub Pages)**: [https://sharath14pixel.github.io/weather-api/](https://sharath14pixel.github.io/weather-api/) *(Enable Pages in Repository Settings → Pages → `main` / `/root`)*
+- **Unit Test Suite**: Open `tests.html` via Live Server to run automated in-browser assertions.
 
 ---
 
-## 🌟 Key Features & Uniqueness Highlights
+## Key Features & Uniqueness Highlights
 
-1. **🧠 Smart Lifestyle & Weather Advisory Engine (Signature Feature)**:
+1. **Smart Lifestyle & Weather Advisory Engine (`js/advisory.js`)**:
    - Evaluates current meteorological conditions and computes 4 actionable real-time lifestyle advisories:
-     - **Outdoor Activity Index**: Analyzes thermal comfort, wind, and precipitation to score fitness/running suitability (Prime, Moderate, or Caution).
-     - **Smart Umbrella & Rain Watch**: Scans the next 12 hours of hourly forecast data and warns of peak precipitation likelihood and exact hour (e.g., *"Up to 85% rain likelihood around 3:00 PM — grab an umbrella!"*).
+     - **Outdoor Activity Index**: Analyzes thermal comfort, wind, and precipitation to score fitness/running suitability (*Prime Conditions*, *Moderate*, or *Caution*).
+     - **Smart Umbrella & Rain Watch**: Scans the next 12 hours of hourly forecast data and warns of peak precipitation likelihood and exact hour (e.g., *"Take an umbrella! Up to 85% rain likelihood around 3:00 PM."*).
      - **Clothing & Layering Guide**: Recommends appropriate attire based on apparent feels-like temperature and wind chill.
-     - **UV Sun Exposure & Protection**: Translates daily UV index into dermatological protection advice (SPF recommendations and peak sun hazard hours).
-2. **🕒 24-Hour Hourly Timeline Scroller**:
-   - Smooth horizontal touch and scroll-wheel timeline detailing the upcoming 24 consecutive hours.
-   - Real-time hourly temperature, condition icons, and rain probability badges.
-3. **☀️ Celestial Daylight & Solar Arc Visualizer**:
-   - An elegant mathematical SVG arc mapping the sun's trajectory across the sky in real-time.
-   - Calculates dawn, dusk, total daylight hours, and remaining daylight countdown with a glowing celestial orb.
-4. **✨ Living Weather Ambience Particle Engine**:
-   - Ultra-lightweight HTML5 Canvas backdrop generating living atmospheric weather effects matching live conditions (drifting snowflakes, soft raindrops, twinkling night stars, golden sun shimmer, or rolling fog mist).
-   - Fully accessible: includes a header toggle switch and automatically halts under `prefers-reduced-motion` or when the browser tab is hidden.
-5. **📋 One-Click Share & Copy Weather Briefing**:
-   - A dedicated "Share Briefing" action in the hero card that generates a formatted report and copies it to clipboard with an interactive floating glassmorphic toast notification.
-6. **Zero External Dependencies & Strict CSP**:
-   - Zero CDNs, zero third-party JS libraries, zero NPM packages, zero API keys.
-   - Hand-crafted inline SVG weather icon sprite with `currentColor` styling.
-   - Strict Content Security Policy (`Content-Security-Policy` meta tag) permitting connections *only* to `'self'` and the two official Open-Meteo API origins.
-7. **Accessible ARIA Combobox Autocomplete**:
-   - Debounced search (380ms) querying candidate cities.
-   - Full W3C ARIA Combobox implementation: `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-activedescendant`, `role="listbox"`, and `role="option"`.
-   - Full keyboard navigation: `ArrowDown`/`ArrowUp` to navigate, `Enter` to select, `Escape` to dismiss.
-8. **Robust Request Management & Race Condition Safety**:
-   - `AbortController` automatically aborts any in-flight request when a new search or selection is made, eliminating race conditions.
-   - 8-second request timeout enforcement via composite signal triggers.
-   - One automatic retry with exponential backoff on transient network drops or HTTP 5xx errors.
-9. **Resilient Error Architecture & Typed Errors**:
-   - Custom typed error classes: `ValidationError`, `NotFoundError`, `NetworkError`, `ApiError`, `TimeoutError`.
-   - Friendly user alerts with contextual "Try Again" action buttons for retryable errors.
-10. **Instant Client-Side Unit Switching**:
-    - Switch between Metric (°C, km/h) and Imperial (°F, mph) with real `<button>` elements utilizing `aria-pressed`.
-    - Conversions happen 100% client-side from stored raw data with zero redundant API calls.
-11. **Smart In-Memory & Session Caching**:
-    - 10-minute TTL cache keyed by coordinate pairs (`lat,lon`), saving bandwidth and preventing rate limiting.
-    - Displays relative updated time ("Updated 2m ago") and a manual "Refresh" button.
-12. **Dynamic Weather & Day/Night Theming**:
-    - CSS custom property themes adapting dynamically based on WMO weather codes and `is_day` flags (Clear Day, Clear Night, Overcast, Rain, Thunderstorm, Snow, Fog).
-    - High contrast guaranteed (WCAG AA contrast ratio ≥ 4.5:1 across all themes).
-    - Manual Light/Dark mode toggle respecting `prefers-color-scheme`.
-13. **Responsive Layout & Zero Layout Shift (CLS = 0)**:
-    - Shimmer skeleton loaders matching the exact dimensions of final loaded cards.
-    - Fluid typography using CSS `clamp()`.
-    - Verified responsive across 360px (mobile), 768px (tablet), 1280px (desktop), and 1920px (large screens).
-    - Dedicated clean print stylesheet (`@media print`).
+     - **UV Sun Exposure & Protection**: Translates daily UV index into dermatological protection advice (SPF recommendations and peak sun hazard windows).
+2. **24-Hour Hourly Timeline Scroller**:
+   - Smooth horizontal touch and scroll-wheel timeline detailing the upcoming 24 consecutive hours with hourly temperatures, condition icons, and rain probability badges.
+3. **Celestial Daylight & Solar Arc Visualizer**:
+   - Mathematical SVG parabolic arc mapping the sun's trajectory across the sky from dawn to dusk in real time, showing total daylight duration and remaining daylight countdown.
+4. **Living Weather Ambience Particle Engine (`js/ambience.js`)**:
+   - Lightweight HTML5 Canvas backdrop generating subtle atmospheric weather effects matching live conditions (drifting snowflakes, angled raindrops, twinkling night stars, golden sun shimmer, or rolling fog mist).
+   - Includes a header toggle button and automatically pauses under `@media (prefers-reduced-motion: reduce)` or when the browser tab is hidden.
+5. **One-Click Share Weather Briefing**:
+   - Copies a formatted plain-text weather report to the clipboard and triggers a floating glassmorphic toast notification.
+6. **Accessible ARIA Combobox Autocomplete**:
+   - Debounced search (380ms) querying candidate cities via Open-Meteo Geocoding.
+   - Full W3C ARIA Combobox implementation (`role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-activedescendant`, `role="listbox"`, `role="option"`) with `ArrowDown`, `ArrowUp`, `Enter`, and `Escape` keyboard support.
+7. **Robust Request Control & Race Condition Safety**:
+   - `AbortController` cancels stale in-flight requests when a new search starts.
+   - 8-second fetch timeout enforcement and 1 automatic retry with exponential backoff on transient network drops or HTTP 5xx responses.
+8. **Resilient Typed Error Hierarchy**:
+   - Custom error classes (`ValidationError`, `NotFoundError`, `NetworkError`, `ApiError`, `TimeoutError`) routed through a centralized state machine (`state.js`) with contextual **"Try Again"** recovery.
+9. **Instant Client-Side Unit Switching & Caching**:
+   - Switch between Metric (`°C, km/h`) and Imperial (`°F, mph`) with `aria-pressed` toggle buttons—100% client-side with zero redundant API calls.
+   - 10-minute coordinate-keyed cache in `sessionStorage` + memory, plus URL query sync (`?city=Tokyo`) and recent search chips in `localStorage`.
+10. **Dynamic Weather & Day/Night Theming**:
+    - CSS custom property themes adapt dynamically by WMO weather code and `is_day` status while maintaining WCAG AA contrast (`>= 4.5:1`), plus a manual Light/Dark mode toggle.
+11. **Responsive Layout & Print Stylesheet**:
+    - Shimmer skeleton loaders prevent layout shift (`CLS = 0`).
+    - Responsive across `360px` (mobile), `768px` (tablet), `1280px` (desktop), and `1920px`, plus a clean monochrome `@media print` stylesheet.
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
-```
-weather-dashboard/
-├── index.html              # Semantic HTML5 entry point & strict CSP
-├── tests.html              # Standalone browser test suite (plain JS assertions)
+```text
+weather-api/
+├── index.html                  # Semantic HTML5 entry point, strict CSP & inline SVG sprite
+├── tests.html                  # Standalone browser unit test suite (plain JS assertions)
 ├── css/
-│   ├── base.css            # CSS reset, design tokens, dynamic themes, typography
-│   ├── components.css      # Combobox, hero card, metrics, forecast, skeletons
-│   └── responsive.css      # Breakpoints (360px-1920px), reduced-motion, print styles
+│   ├── base.css                # CSS reset, [hidden] guard, design tokens, dynamic themes
+│   ├── components.css          # Combobox, hero card, solar arc, hourly scroller, advisory, forecast
+│   └── responsive.css          # Breakpoints (360px-1920px), reduced-motion, print stylesheet
 ├── js/
-│   ├── config.js           # API endpoints, limits, timeouts, storage keys
-│   ├── api.js              # findCity, searchCities, getWeather, fetchJson with retry
-│   ├── weatherCodes.js     # WMO code -> label, SVG icon key, and theme key mapping
-│   ├── advisory.js         # Smart lifestyle engine (Activity, Umbrella, Dressing, UV, Solar Arc)
-│   ├── ambience.js         # Living weather particle canvas engine (Rain, Snow, Stars, Shimmer)
-│   ├── render.js           # Pure DOM rendering (createElement + textContent ONLY)
-│   ├── state.js            # Reactive UI state machine (idle | loading | success | empty | error)
-│   ├── storage.js          # Safe localStorage/sessionStorage wrapper with try/catch
-│   ├── utils.js            # Debounce, validators, formatters, unit converters, typed errors
-│   └── main.js             # Bootstrap, event wiring, combobox controls, orchestration
-├── assets/icons/
-│   └── weather-icons.svg   # Hand-crafted SVG weather icon sprite
-└── README.md               # Technical documentation & internship review notes
+│   ├── config.js               # API URLs, limits, timeouts, storage keys, default city
+│   ├── api.js                  # fetchJson with timeout/retry, findCity, searchCities, getWeather
+│   ├── weatherCodes.js         # WMO code -> label, SVG icon key, and theme key map
+│   ├── advisory.js             # Smart lifestyle engine (Activity, Umbrella, Dressing, UV, Solar Arc)
+│   ├── ambience.js             # Living weather particle canvas engine
+│   ├── render.js               # Pure DOM rendering (createElement + textContent only)
+│   ├── state.js                # Reactive UI state machine (idle | loading | success | empty | error)
+│   ├── storage.js              # Safe localStorage/sessionStorage wrapper with try/catch
+│   ├── utils.js                # Debounce, validators, formatters, unit converters, typed errors
+│   └── main.js                 # Bootstrap, event wiring, combobox controls, orchestration
+├── assets/
+│   └── icons/
+│       └── weather-icons.svg   # Hand-crafted SVG weather icon sprite (currentColor)
+└── README.md                   # Project documentation & Error Handling Note
 ```
 
 ---
 
-## 🔄 API Flow: Geocoding & Forecast
+## API Flow (Geocoding → Forecast)
 
-The application uses two endpoints from the free **Open-Meteo API** (no API key required):
+The application consumes two free, keyless endpoints from **[Open-Meteo](https://open-meteo.com/)**:
 
 ```mermaid
 sequenceDiagram
@@ -105,113 +97,85 @@ sequenceDiagram
     participant Forecast as Open-Meteo Forecast API
     participant Render as js/render.js
 
-    User->>Main: Types city name (e.g. "Paris")
-    Main->>API: searchCities("Paris") [Debounced >= 380ms]
-    API->>Geo: GET /v1/search?name=Paris&count=5
+    User->>Main: Types city name (e.g. "Tokyo")
+    Main->>API: searchCities("Tokyo") [Debounced >= 380ms]
+    API->>Geo: GET /v1/search?name=Tokyo&count=5
     Geo-->>API: 200 OK (Candidate list)
     API-->>Main: Parsed candidate array
     Main->>Render: renderSuggestions()
 
-    User->>Main: Submits form or clicks suggestion
-    Main->>API: findCity("Paris") & getWeather(lat, lon)
-    API->>Forecast: GET /v1/forecast?latitude=48.85&longitude=2.35&current=...&daily=...
-    Forecast-->>API: 200 OK (Current + 5-day payload)
-    API-->>Main: Validated Weather Object
-    Main->>Render: renderCurrentWeather() & renderForecast()
+    User->>Main: Submits form or selects suggestion
+    Main->>API: findCity("Tokyo") & getWeather(lat, lon)
+    API->>Forecast: GET /v1/forecast?latitude=35.69&longitude=139.69&current=...&hourly=...&daily=...
+    Forecast-->>API: 200 OK (Current + 24h Hourly + 5-day Daily)
+    API-->>Main: Validated Weather Payload
+    Main->>Render: Hero + Solar Arc + Hourly + Advisory + 5-Day Forecast
 ```
 
 ---
 
-## 🛡️ Security & XSS Prevention
+## Security & Accessibility
 
-- **Zero innerHTML**: Dynamic and user-facing data is mounted exclusively through `document.createElement`, `element.textContent`, and SVG namespace element builders (`createElementNS`).
-- **Input Sanitization**: User inputs are trimmed, normalized, stripped of repeated whitespaces, length-bounded (≤ 80 characters), and validated with Unicode-aware regexes (`/\p{L}/u`) to reject pure digit/symbol injections.
-- **Strict Content Security Policy**:
+- **XSS Prevention**: Zero `innerHTML` usage with API or user-derived data. All DOM nodes are built via `document.createElement`, `textContent`, and `document.createElementNS`.
+- **Strict Content Security Policy (CSP)**:
   ```html
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://geocoding-api.open-meteo.com https://api.open-meteo.com;">
   ```
+- **WCAG 2.1 AA Accessibility**: Semantic landmarks (`header`, `main`, `footer`), `aria-live="polite"` screen-reader announcements, visible `:focus-visible` outlines, full keyboard operation, `>= 44px` tap targets, and `@media (prefers-reduced-motion: reduce)` support.
 
 ---
 
-## ♿ Accessibility (WCAG 2.1 AA)
+## How to Run Locally
 
-- **Semantic Landmarks**: `<header role="banner">`, `<form role="search">`, `<main id="weather-content">`, `<footer role="contentinfo">`.
-- **Screen Reader Announcements**: Live region (`#status-announcer` with `aria-live="polite"` and `aria-atomic="true"`) notifies screen readers upon search initiation, cache hits, successful loads, and errors.
-- **Keyboard Navigation**:
-  - Full tab stop sequence with high-contrast `:focus-visible` indicators.
-  - Combobox suggestions support `ArrowDown`, `ArrowUp`, `Enter`, and `Escape`.
-- **Motion & Contrast**:
-  - Respects `@media (prefers-reduced-motion: reduce)` by disabling shimmer effects, card transitions, and spin animations.
-  - Respects Windows High Contrast / Forced Colors mode (`@media (forced-colors: active)`).
-
----
-
-## 🚀 How to Run Locally
+> **Note**: Because the app uses native ES Modules (`<script type="module">`), it must be served over `http://` rather than opened directly as `file://`.
 
 ### Option 1: VS Code Live Server (Recommended)
-1. Open the project folder (`weather-dashboard` or workspace root) in Visual Studio Code.
-2. Ensure the **Live Server** extension (by Ritwick Dey) is installed.
-3. Right-click `index.html` and click **"Open with Live Server"** (or click "Go Live" in the status bar).
-4. The dashboard will automatically launch at `http://127.0.0.1:5500/index.html`.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sharath14pixel/weather-api.git
+   cd weather-api
+   ```
+2. Open the folder in **VS Code**.
+3. Right-click `index.html` and select **"Open with Live Server"** (or click **"Go Live"** in the status bar).
 
-### Option 2: Simple Local Python / Node Server
+### Option 2: Python / Node Local Server
 ```bash
-# Using Python 3:
+# Python 3
 python -m http.server 8000
 
-# Or using npx:
+# Or Node.js
 npx serve .
 ```
-Navigate to `http://localhost:8000`.
+Then open `http://localhost:8000` in your browser.
 
 ---
 
-## 🌐 GitHub Pages Deployment
+## GitHub Pages Deployment
 
-1. Create a new GitHub repository: `weather-dashboard`.
-2. Push your files to the `main` branch:
-   ```bash
-   git init
-   git add .
-   git commit -m "feat: initial production-ready weather dashboard release"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/weather-dashboard.git
-   git push -u origin main
-   ```
-3. In your GitHub repository:
-   - Go to **Settings** > **Pages**.
-   - Under **Build and deployment** > **Source**, choose **Deploy from a branch**.
-   - Select `main` branch and `/ (root)` folder.
-   - Click **Save**.
-4. Your site will be live within 1–2 minutes at:
-   `https://<your-username>.github.io/weather-dashboard/`
+1. Push your code to the `main` branch of `https://github.com/sharath14pixel/weather-api`.
+2. Open **Settings → Pages** in your GitHub repository.
+3. Under **Build and deployment → Source**, select **Deploy from a branch**.
+4. Choose **`main`** and **`/ (root)`**, then click **Save**.
+5. Access the live site at `https://sharath14pixel.github.io/weather-api/`.
 
 ---
 
-## 🧪 Running Automated Unit Tests
+## Automated Unit Tests
 
-Open `tests.html` in any modern web browser or open it through Live Server:
-- `http://127.0.0.1:5500/tests.html`
-
-The test runner will automatically execute and display real-time assertions for:
-- Input validator edge cases (empty strings, Unicode accents, pure numbers/symbols, max length).
-- Temperature and wind speed conversions (°C ↔ °F, km/h ↔ mph).
-- Debounce execution and cancellation timing.
-- WMO Weather Code map completeness across all 28 supported codes.
-- Query parameter URL encoding.
+Open `tests.html` through Live Server (e.g., `http://127.0.0.1:5500/tests.html`) to execute plain-JS assertions covering:
+- `validateCity` (empty, whitespace, max length 80, Unicode characters, pure digits/symbols)
+- Unit conversions (`celsiusToFahrenheit`, `kmhToMph`)
+- WMO weather code coverage across all 28 supported codes
+- URL encoding and `debounce` timing/cancellation
+- Smart Advisory calculations (`calculateActivityIndex`, `calculateUmbrellaAlert`, `calculateClothingRecommendation`, `calculateUvAdvisory`, `calculateSolarProgress`)
 
 ---
 
-## 📝 Error Handling Note (Internship Submission Document)
+## Error Handling Note (Internship Submission)
 
-> **Architectural Error-Handling Strategy**
-> 
-> The application treats error handling as a first-class user experience priority rather than an afterthought. Every failure scenario is classified into a typed error hierarchy (`ValidationError`, `NotFoundError`, `NetworkError`, `ApiError`, `TimeoutError`) and routed through a single reactive state machine in `state.js`.
-> 
-> 1. **Client-Side Validation**: Form submission triggers `validateCity()`, which verifies string lengths (≤ 80 chars), collapses whitespaces, and ensures Unicode letter presence. Invalid inputs highlight the field with `aria-invalid="true"` and an inline error linked via `aria-describedby` without triggering network overhead.
-> 2. **Network Failures & Timeouts**: The `fetchJson()` utility enforces an 8-second `AbortSignal` timeout and verifies `response.ok`. Network drops and HTTP 5xx responses trigger one automatic retry with exponential backoff (`CONFIG.TIMING.RETRY_DELAY_MS`). If exhaustion occurs, friendly cards explain the issue and provide a "Try Again" button.
-> 3. **City Not Found**: If geocoding returns an empty candidate list, a specific `NotFoundError` is thrown with instructions to check spelling.
-> 4. **Race Conditions**: Every search instantiates a fresh `AbortController`, automatically canceling stale in-flight requests.
-> 5. **Geolocation Rejections**: Denied permissions or hardware timeouts are captured via `navigator.geolocation` error codes and surface non-blocking contextual guidance while maintaining existing dashboard data.
-#   w e a t h e r - a p i  
- 
+> The application treats error handling as a core part of the user experience rather than an afterthought. Every failure mode is mapped to a custom typed error class (`ValidationError`, `NotFoundError`, `NetworkError`, `ApiError`, `TimeoutError`) and managed through a centralized state machine in `js/state.js` (`idle | loading | success | empty | error`).
+>
+> - **Empty & Invalid Input**: On submit, `validateCity()` trims and collapses whitespace, enforces an 80-character limit, and checks for at least one Unicode letter (`/\p{L}/u`). Invalid inputs display an inline error linked via `aria-describedby` and `aria-invalid="true"` without making any network call.
+> - **City Not Found**: If the Open-Meteo Geocoding API returns no matching results, `findCity()` throws a `NotFoundError` with clear spelling guidance.
+> - **Network Failure, Timeout & Non-OK Responses**: `fetchJson()` enforces an 8-second `AbortSignal` timeout, verifies `response.ok` before parsing JSON, and catches malformed payloads. Transient network failures and HTTP `5xx` errors automatically trigger one retry with exponential backoff before rendering an accessible error card with a **"Try Again"** button.
+> - **Geolocation Denial & Race Conditions**: `navigator.geolocation` denials fall back to friendly search guidance, while each new search aborts any prior in-flight `AbortController` so stale responses can never overwrite newer results.
